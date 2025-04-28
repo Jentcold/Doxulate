@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docxulate</title>
+    <link rel="stylesheet" href="HomePageAssets/HomePageStyle.css"> 
+    <script src="HomePageAssets/HomeScript.js" defer></script> 
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <a>Docxulate</a>
+            </div>
+            <div class="nav-links hide-mobile">
+                <ul>
+                    <li class="nav-info">
+                        <a href="#">Github</a>
+                        <a href="#">FAQ</a>
+                    </li>
+                </ul>
+            </div>
+            
+        </div>
+    </header>
+    <main>
+        <section class="upload-section">
+            <div class="upload-box" id="uploadBox">
+                <div class="dropdowns">
+                    <select id="sourceLang"></select>
+                    <span class="divider"></span>
+                    <select id="targetLang"></select>
+                </div>
+                <div class="upload-message">
+                    <img src="/site/HomePageAssets/FolderIcon.svg" class="Upload FolderIcon" alt="folder-icon">
+                    <p id="UploadFileName" class="Upload"></p>
+                    <p class="upload-instructions noUpload">Press the "Upload" button or drag document to upload</p>
+                    <p class="file-types" id="changetxt">Supported file types: DOCX only</p>
+                </div>
+                <input type="file" id="fileInput" accept=".docx" style="display: none;">
+            </div>
+            <div class="operation-buttons">
+                <!-- Upload/Translate Buttons -->
+                <button id="uploadButton">Upload</button>
+                <button id="translateButton">Start Translation</button>
+                <!-- Download Button and loading text (hidden by default) -->
+                <button id="downloadButton" style="display: none;">Download</button>
+                <p id="loadText" style="display: none;">Translating...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="hide-mobile">
+        <div class="footer-nav">
+            <ul>
+                <li><a href="#">Report issue</a></li>
+            </ul>
+        </div>
+        <div class="footer-social-icons">
+            <ul>
+                <li><a href="#">LinkedIn</a></li>
+                <li><a href="#">Discord</a></li>
+            </ul>
+        </div>
+    </footer>
+</body>
+</html>
