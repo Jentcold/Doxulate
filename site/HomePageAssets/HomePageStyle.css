@@ -180,6 +180,14 @@ select {
     
 }
 
+#messageBox {
+    color: red;
+    font-weight: bold;
+    padding: 1rem;
+    background-color: rgba(255, 0, 0, 0.1);
+    border: 1px solid red;
+}
+
 /* Footer */
 footer {
     position: fixed;
