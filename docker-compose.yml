@@ -22,7 +22,6 @@ services:
     volumes:
       - ./site:/app/site
       - ./tmp:/app/tmp
-      - ./tmp_translated:/app/tmp_translated
     depends_on:
       libretranslate:
         condition: service_healthy
