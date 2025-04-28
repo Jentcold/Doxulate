@@ -2,6 +2,12 @@ import os,shutil,zipfile
 from lxml import etree as ET
 from libretranslatepy import LibreTranslateAPI
 
+# Definitions to stay safe
+UPLOAD_DIR = "/app/tmp"
+TRANSLATED_DIR = "/app/tmp_translated"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+os.makedirs(TRANSLATED_DIR, exist_ok=True)
+
 # translate function
 def translate(original_text_list, source_language, target_language):
     lt_url = os.getenv("LIBRETRANSLATE_URL", "http://localhost:5000")
@@ -87,14 +93,13 @@ def repackage_docx(folder_to_zip, output_docx):
                 docx_zip.write(file_path, arcname)
 
 # clean temp folder
-    UPLOAD_DIR="/app/tmp"
-    def clean_temp_folder(folder=UPLOAD_DIR):
-        try:
-            if os.path.exists(folder):
-                shutil.rmtree(folder)
-            os.makedirs(folder, exist_ok=True)
-        except Exception as e:
-            print(f"Error cleaning {folder}: {str(e)}")
+def clean_temp_folder(folder=UPLOAD_DIR):
+    try:
+        if os.path.exists(folder):
+            shutil.rmtree(folder)
+        os.makedirs(folder, exist_ok=True)
+    except Exception as e:
+        print(f"Error cleaning {folder}: {str(e)}")
 
 
 # operation function 
