@@ -3,197 +3,146 @@ document.addEventListener("DOMContentLoaded", function() {
     const fileInput = document.getElementById("fileInput");
     const sourceDropdown = document.getElementById("sourceLang");
     const targetDropdown = document.getElementById("targetLang");
+    const uploadButton = document.getElementById("uploadButton");
+    const translateButton = document.getElementById("translateButton");
+    const downloadButton = document.getElementById("downloadButton");
+    const loadText = document.getElementById("loadText");
+    const messageBox = document.getElementById("messageBox"); 
 
-    // Hardcoded fallback languages
+    // Centralized base URL
+    const API_BASE = window.API_BASE || window.location.origin;
+
+    // inline messages
+    function showMessage(type, text, timeout = 5000) {
+        messageBox.textContent = text;
+        messageBox.className = "";           // reset classes
+        messageBox.classList.add(type);      // e.g. 'info', 'error', 'success'
+        messageBox.style.display = "block";
+        if (timeout) {
+            setTimeout(() => { messageBox.style.display = "none"; }, timeout);
+        }
+    }
+
+    // Fallback languages
     const FALLBACK_LANGUAGES = {
-        en: "English",
-        fr: "French",
-        ar: "Arabic",
-        es: "Spanish",
-        de: "German",
-        zh: "Chinese"
+        en: "English", fr: "French", ar: "Arabic",
+        es: "Spanish", de: "German", zh: "Chinese"
     };
 
-    // Load languages from LibreTranslate API
+    // Load languages from API or fallback
     async function loadLanguages() {
         try {
-            const response = await fetch('http://localhost:5000/languages');
-            if (!response.ok) throw new Error('API response not OK');
-            
-            const apiLanguages = await response.json();
-            return apiLanguages.reduce((acc, lang) => {
-                acc[lang.code] = lang.name;
-                return acc;
-            }, {});
-        } catch (error) {
-            console.warn('Using fallback languages:', error);
+            let res = await fetch(`${API_BASE}/languages`);
+            if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+            let list = await res.json();
+            return list.reduce((m, l) => (m[l.code] = l.name, m), {});
+        } catch (err) {
+            console.warn("Language load failed:", err);
+            showMessage("error", "Could not load languages, using defaults.");
             return FALLBACK_LANGUAGES;
         }
     }
 
-    // Populate dropdowns with languages
+    // Populate dropdowns
     async function initLanguageDropdowns() {
-        const languages = await loadLanguages();
-        
-        // Clear existing options
-        sourceDropdown.innerHTML = '';
-        targetDropdown.innerHTML = '';
-        
-        // Add new options
-        for (const [code, name] of Object.entries(languages)) {
-            const option1 = new Option(name, code);
-            const option2 = new Option(name, code);
-            sourceDropdown.add(option1);
-            targetDropdown.add(option2);
-        }
-        
-        // Set sensible defaults if available
-        if (languages['en']) sourceDropdown.value = 'en';
-        if (languages['es']) targetDropdown.value = 'es';
+        const langs = await loadLanguages();
+        [sourceDropdown, targetDropdown].forEach(dd => dd.innerHTML = "");
+        Object.entries(langs).forEach(([code, name]) => {
+            sourceDropdown.add(new Option(name, code));
+            targetDropdown.add(new Option(name, code));
+        });
+        if (langs.en) sourceDropdown.value = "en";
+        if (langs.es) targetDropdown.value = "es";
     }
 
-    // Initialize the page
-    async function init() {
-        await initLanguageDropdowns();
-        
-        // File picker
-        document.getElementById("uploadButton").addEventListener("click", function() {
-            fileInput.click();
-        });
-
-        //  Start Translate
-        document.getElementById("translateButton").addEventListener("click", function() {
-            let file = fileInput.files[0]; // Get selected file
-
-            if (!file) {
-                alert("Please select a file first!");
-                return;
-            }
-
-            uploadFile(file); // Call the upload function
-        });
-
-        // Handle file selection
-        fileInput.addEventListener("change", function(event) {
-            let file = event.target.files[0];
-            if (file) {
-                console.log("File Name:", file.name); 
-                
-                document.getElementById("changetxt").textContent = file.name;
-                document.querySelector(".Upload").style.display = "block";
-                document.querySelector(".noUpload").style.display = "none";
-            }
-        });
-
-        // Drag & Drop 
-        uploadBox.addEventListener("dragover", function(event) {
-            event.preventDefault();
-            uploadBox.classList.add("dragover");
-        });
-        uploadBox.addEventListener("dragleave", function() {
-            uploadBox.classList.remove("dragover");
-        });
-        uploadBox.addEventListener("drop", function(event) {
-            event.preventDefault();
-            uploadBox.classList.remove("dragover");
-
-            let file = event.dataTransfer.files[0];
-            if (file) {
-                console.log("File Name:", file.name); 
-                
-                document.getElementById("changetxt").textContent = file.name;
-                document.querySelector(".Upload").style.display = "block";
-                document.querySelector(".noUpload").style.display = "none";
-            }
-        });
+    // UI reset 
+    function resetUI() {
+        loadText.style.display = "none";
+        downloadButton.style.display = "none";
+        uploadButton.disabled = false;
+        translateButton.disabled = false;
+        fileInput.value = "";
+        document.getElementById("changetxt").textContent = "No file selected";
+        document.querySelector(".Upload").style.display = "none";
+        document.querySelector(".noUpload").style.display = "block";
     }
-    init();
-    
-    // Function to upload file to FastAPI 
-    async function uploadFile(file) {
-        // Check file type 
-        if (!file.name.endsWith(".docx")) {
-            alert("File type Not allowed!");
-            return;
+
+    // File select handlers
+    document.getElementById("uploadButton").addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", e => {
+        let file = e.target.files[0];
+        if (file) {
+            document.getElementById("changetxt").textContent = file.name;
+            document.querySelector(".Upload").style.display = "block";
+            document.querySelector(".noUpload").style.display = "none";
         }
-
-        // check duplicate languages
-        const sourceLang = document.getElementById("sourceLang").value;
-        const targetLang = document.getElementById("targetLang").value;
-        if (sourceLang === targetLang) {
-            alert("Source and target languages cannot be the same.");
-            return;
+    });
+    uploadBox.addEventListener("dragover", e => {
+        e.preventDefault(); uploadBox.classList.add("dragover");
+    });
+    uploadBox.addEventListener("dragleave", () => uploadBox.classList.remove("dragover"));
+    uploadBox.addEventListener("drop", e => {
+        e.preventDefault(); uploadBox.classList.remove("dragover");
+        let file = e.dataTransfer.files[0];
+        if (file) {
+            fileInput.files = e.dataTransfer.files;
+            document.getElementById("changetxt").textContent = file.name;
+            document.querySelector(".Upload").style.display = "block";
+            document.querySelector(".noUpload").style.display = "none";
         }
+    });
 
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("source_lang", sourceLang);
-        formData.append("target_lang", targetLang);
+    // Main upload & translate flow
+    translateButton.addEventListener("click", uploadAndTranslate);
 
-        // Show load bar and hide buttons
-        document.getElementById('loadText').style.display = "inline-block";
-        document.getElementById("translateButton").style.display = "none";
-        document.getElementById("uploadButton").style.display = "none";
+    async function uploadAndTranslate() {
+        let file = fileInput.files[0];
+        if (!file) { showMessage("warning", "Please select a file first!"); return; }
+        if (!file.name.endsWith(".docx")) { showMessage("error", "Only .docx files allowed."); return; }
+        const src = sourceDropdown.value, tgt = targetDropdown.value;
+        if (src === tgt) { showMessage("warning", "Source and target must differ."); return; }
 
-        // Fetch upload function
+        // Prepare UI
+        uploadButton.disabled = true;
+        translateButton.disabled = true;
+        loadText.style.display = "inline-block";
+        showMessage("info", "Uploading and translating…", 0); // sticky until clear
+
+        const form = new FormData();
+        form.append("file", file);
+        form.append("source_lang", src);
+        form.append("target_lang", tgt);
+
         try {
-            const response = await fetch("/upload/", {
-                method: "POST",
-                body: formData
-            });
-
-            // Check Response
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error("Upload failed:", errorText);
+            let res = await fetch(`${API_BASE}/upload/`, { method: "POST", body: form });
+            if (!res.ok) {
+                let errorMsg = await res.text();
+                showMessage("error", `Upload failed: ${errorMsg}`, 8000);
                 resetUI();
-                alert("Upload failed. Please try again.");
                 return;
             }
-
-            const blob = await response.blob();
-            console.log("Blob Type:", blob.type);  // log file type
-
-            // Hide loading and show download button
-            document.getElementById('loadText').style.display = "none";
-            document.getElementById("downloadButton").style.display = "inline-block";
-
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "translated_" + file.name;
-            document.body.appendChild(a);
-
-            // Click to download 
-            document.getElementById("downloadButton").addEventListener("click", function() {
+            let blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            downloadButton.style.display = "inline-block";
+            showMessage("success", "Ready to download!");
+            downloadButton.onclick = () => {
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "translated_" + file.name;
+                document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-
-                // Reset buttons after download
-                document.getElementById('loadText').style.display = "none";
-                document.getElementById("downloadButton").style.display = "none"; 
-                document.getElementById("uploadButton").style.display = "inline-block"; 
-                document.getElementById("translateButton").style.display = "inline-block"; 
+                URL.revokeObjectURL(url);
                 resetUI();
-            });
-        } catch (error) {
-            console.error("Network error:", error);
+            };
+        } catch (err) {
+            console.error("Network error:", err);
+            showMessage("error", "Network error. Please try again.");
+            resetUI();
+        } finally {
+            loadText.style.display = "none";
         }
     }
 
-    // Reset UI
-    function resetUI() {
-        document.getElementById('loadText').style.display = "none";
-        document.getElementById("downloadButton").style.display = "none";  
-        document.getElementById("uploadButton").style.display = "inline-block";  
-        document.getElementById("translateButton").style.display = "inline-block";  
-
-        // Reset file input and text
-        document.getElementById("fileInput").value = "";  
-        document.getElementById("changetxt").textContent = "No file selected"; 
-        document.querySelector(".Upload").style.display = "none";
-        document.querySelector(".noUpload").style.display = "block"; 
-    }
-
+    initLanguageDropdowns();
 });
