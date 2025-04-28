@@ -14,11 +14,11 @@ import Functions
 app = FastAPI()
 
 # Set up the templates directory for Jinja2
-templates = Jinja2Templates(directory="/home/mostafabadboudi/Google_Doculate_Backup/site/")
+templates = Jinja2Templates(directory="/app/site")
 
 # Serve static files (CSS, JS, etc.)
-app.mount("/site", StaticFiles(directory="/home/mostafabadboudi/Google_Doculate_Backup/site"), name="HTML")
-app.mount("/HomePageAssets", StaticFiles(directory="/home/mostafabadboudi/Google_Doculate_Backup/site/HomePageAssets"), name="HomePageAssets")
+app.mount("/site", StaticFiles(directory="/app/site"), name="HTML")
+app.mount("/HomePageAssets", StaticFiles(directory="/app/site/HomePageAssets"), name="HomePageAssets")
 
 # Set up for file transfer 
 # Allowed file types (MIME types)
@@ -28,10 +28,8 @@ ALLOWED_FILE_TYPES = {"application/vnd.openxmlformats-officedocument.wordprocess
 MAX_FILE_SIZE = 10 * 1024 * 1024  
 
 # Temporary storage directory
-UPLOAD_DIR = "/home/mostafabadboudi/Google_Doculate_Backup/tmp" 
-TRANSLATED_DIR = "/home/mostafabadboudi/Google_Doculate_Backup/tmp_translated" 
+UPLOAD_DIR = "/app/tmp"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-os.makedirs(TRANSLATED_DIR, exist_ok=True)
 
 # Home page endpoint
 @app.get("/", response_class=HTMLResponse)
