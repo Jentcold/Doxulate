@@ -1,29 +1,74 @@
-# Doxulate - word Document Translation Web App
+# Doxulate - Document Translation Web App
 
-Doxulate is a web application that allows users to upload word documents and translate them using LibreTranslate, whilst keeping the format of the document.
+![Doxulate Screenshot](https://via.placeholder.com/800x400?text=Doxulate+Interface) <!-- Replace with actual screenshot -->
 
-![Doxulate Screenshot](https://via.placeholder.com/800x400?text=Doxulate+Screenshot) <!-- Replace with actual screenshot -->
+FastAPI-powered web application for translating documents using LibreTranslate's self-hosted engine.
 
 ## Features
 
-- Upload documents in DOCX format (PDF soon)
-- Consistent file format after translation 
-- Translate documents between multiple languages
-- Simple and intuitive user interface
-- Self-hosted translation service
-
+- DOCX file translation with formatting preservation 
+- Multi-language support (English, Spanish, French, etc.)
+- Simple drag-and-drop interface
+- Self-contained Docker deployment
+- ( PDF and other formats support soon )
 
 ## Prerequisites
 
-- Python
-- Docker (optional)
+- Docker Engine 20.10+
+- Docker Compose 2.12+
+- 4GB RAM minimum (8GB recommended for better performance)
 
+## One-Command Deployment
 
-## Quick Start with Docker
+```bash
+git clone https://github.com/Jentcold/Doxulate.git
+cd Doxulate
+docker-compose up --build
+```
 
-The easiest way to run Doxulate is using the provided Docker setup:
+Access the application at: [http://localhost:8000](http://localhost:8000)
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/Jentcold/Doxulate.git
-   cd Doxulate
+## Docker Services
+
+| Service | Port | Description |
+|---------|------|-------------|
+| Doxulate | 8000 | Main web interface |
+| LibreTranslate | 5000 | Translation engine API |
+
+## File Structure
+
+```
+.
+├── site/               # Frontend templates and assets
+├── tmp/                # Temporary operation storage (auto-created)
+├── main.py             # FastAPI application
+├── Functions.py        # Core translation logic
+├── Dockerfile          # App container configuration
+└── docker-compose.yml  # Full environment setup
+```
+
+## Environment Variables
+
+Configure in `docker-compose.yml`:
+
+- `LIBRETRANSLATE_URL`: Translation service endpoint
+- `LOAD_ONLY`: Languages to enable (space-separated)
+
+## Development Mode
+
+```bash
+# Run with live reload for frontend changes
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+```
+
+## Troubleshooting
+
+**Q**: Translations fail with connection errors  
+**A**: Wait 30-60 seconds after startup for LibreTranslate to initialize 
+
+**Q**: File uploads failing  
+**A**: Ensure the `tmp` directory exists and have write permissions
+
+## License
+
+MIT License - See [LICENSE](LICENSE) for details.
