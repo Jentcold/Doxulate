@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  libretranslate:
+    image: libretranslate/libretranslate
+    ports:
+      - "5000:5000"
+    environment:
+      - LOAD_ONLY=en,es,fr,de,it,pt,ru  # Optional: limit languages to save space
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  doxulate:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - LIBRETRANSLATE_URL=http://libretranslate:5000
+    depends_on:
+      libretranslate:
+        condition: service_healthy
+    volumes:
+      - ./uploads:/app/uploads  # Persist uploaded files
