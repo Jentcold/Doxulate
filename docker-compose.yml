@@ -3,11 +3,10 @@ version: '3.8'
 services:
   libretranslate:
     image: libretranslate/libretranslate
-    container_name: libretranslate
     ports:
       - "5000:5000"
     environment:
-      - LOAD_ONLY=en,es,fr,de,it,pt,ru  # Limited languages to save space
+      - LOAD_ONLY=en,es,fr,de,it,pt,ru
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000"]
       interval: 10s
@@ -16,15 +15,14 @@ services:
 
   doxulate:
     build: .
-    container_name: doxulate
     ports:
       - "8000:8000"
     environment:
-      - LIBRETRANSLATE_URL=http://libretranslate:5000 
+      - LIBRETRANSLATE_URL=http://libretranslate:5000
+    volumes:
+      - ./site:/app/site
+      - ./tmp:/app/tmp
+      - ./tmp_translated:/app/tmp_translated
     depends_on:
       libretranslate:
         condition: service_healthy
-    volumes:
-      - ./uploads:/app/uploads
-      - ./templates:/app/templates
-      - ./static:/app/static
