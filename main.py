@@ -65,12 +65,14 @@ def cleanup_old_files(folder_path=TRANSLATED_DIR, max_age_hours=24):
 
 # === Initialise APP ===
 
-# Wait for LibreTranslate 
-wait_for_service("http://libretranslate:5000")
-
 # Initialize FastAPI app
 app = FastAPI()
 
+# Wait for LibreTranslate 
+@app.on_event("startup")
+def on_startup():
+    wait_for_service("http://libretranslate:5000")
+    
 # Set up the templates directory for Jinja2
 templates = Jinja2Templates(directory="/app/site")
 
