@@ -120,7 +120,8 @@ def full_operation(filepath,source_language,target_language):
     replace_text_in_xml(original_text_list, translated_text_list, tree, xml_text_file)
 
     # Repackage docx 
-    translated_path = f"{path}_translated.docx"
+    filename = path.split('/')[-1]
+    translated_path = f"{TRANSLATED_DIR}/{filename}_translated.docx"
     repackage_docx(outputfolder,translated_path) 
     
     # Clean up /tmp
