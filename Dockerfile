@@ -13,6 +13,7 @@ RUN pip install --no-cache-dir -r requirements.txt
     
 # Create directories
 RUN mkdir -p /app/tmp /app/tmp_translated /app/site /app/site/HomePageAssets
+RUN chmod -R 777 /app/tmp /app/tmp_translated
 
 # Create non root user
 RUN useradd --create-home appuser
