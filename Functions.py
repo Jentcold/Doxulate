@@ -86,12 +86,14 @@ def repackage_docx(folder_to_zip, output_docx):
                 arcname = os.path.relpath(file_path, folder_to_zip)
                 docx_zip.write(file_path, arcname)
 
-# delete the folder with excess data 
-def delete_excess_folder(folder_path):
-    # Check if the folder exists
-    if os.path.exists(folder_path):
-        # Delete the folder and all its contents
-        shutil.rmtree(folder_path)
+# clean temp folder
+    def clean_temp_folder():
+        try:
+            if os.path.exists("/tmp"):
+                shutil.rmtree("/tmp")
+            os.makedirs("/tmp", exist_ok=True)
+        except Exception as e:
+            print(f"Error cleaning /tmp: {str(e)}")
 
 
 # operation function 
@@ -108,10 +110,13 @@ def full_operation(filepath,source_language,target_language):
     # Translate text 
     translated_text_list = translate(original_text_list,source_language,target_language)
 
-    #step 4 reinsert text
+    # Reinsert text
     replace_text_in_xml(original_text_list, translated_text_list, tree, xml_text_file)
 
-    #step 5 repackage docx 
+    # Repackage docx 
     translated_path = f"{path}_translated.docx"
-    repackage_docx(outputfolder,translated_path) # get same path till the end 
+    repackage_docx(outputfolder,translated_path) 
+    
+    # Clean up /tmp
+    clean_temp_folder()
     return translated_path
