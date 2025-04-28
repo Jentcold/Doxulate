@@ -1,83 +1,114 @@
 document.addEventListener("DOMContentLoaded", function() {
-    let uploadBox = document.getElementById("uploadBox");
-    let fileInput = document.getElementById("fileInput");
+    const uploadBox = document.getElementById("uploadBox");
+    const fileInput = document.getElementById("fileInput");
+    const sourceDropdown = document.getElementById("sourceLang");
+    const targetDropdown = document.getElementById("targetLang");
 
-    // language dropdown options
-    const languages = {
+    // Hardcoded fallback languages
+    const FALLBACK_LANGUAGES = {
         en: "English",
         fr: "French",
         ar: "Arabic",
         es: "Spanish",
         de: "German",
-        zh: "Chinese",
-        // Add more here...
+        zh: "Chinese"
     };
 
-    // Add language options to dropdowns
-    const sourceDropdown = document.getElementById("sourceLang");
-    const targetDropdown = document.getElementById("targetLang");
-    for (const [code, name] of Object.entries(languages)) {
-        const option1 = document.createElement("option");
-        option1.value = code;
-        option1.textContent = name;
-
-        const option2 = option1.cloneNode(true); // for target
-
-        sourceDropdown.appendChild(option1);
-        targetDropdown.appendChild(option2);
+    // Load languages from LibreTranslate API
+    async function loadLanguages() {
+        try {
+            const response = await fetch('http://localhost:5000/languages');
+            if (!response.ok) throw new Error('API response not OK');
+            
+            const apiLanguages = await response.json();
+            return apiLanguages.reduce((acc, lang) => {
+                acc[lang.code] = lang.name;
+                return acc;
+            }, {});
+        } catch (error) {
+            console.warn('Using fallback languages:', error);
+            return FALLBACK_LANGUAGES;
+        }
     }
 
-    // File picker
-    document.getElementById("uploadButton").addEventListener("click", function() {
-        document.getElementById("fileInput").click();
-    });
-
-    //  Start Translate
-    document.getElementById("translateButton").addEventListener("click", function() {
-        let file = fileInput.files[0]; // Get selected file
-
-        if (!file) {
-            alert("Please select a file first!");
-            return;
+    // Populate dropdowns with languages
+    async function initLanguageDropdowns() {
+        const languages = await loadLanguages();
+        
+        // Clear existing options
+        sourceDropdown.innerHTML = '';
+        targetDropdown.innerHTML = '';
+        
+        // Add new options
+        for (const [code, name] of Object.entries(languages)) {
+            const option1 = new Option(name, code);
+            const option2 = new Option(name, code);
+            sourceDropdown.add(option1);
+            targetDropdown.add(option2);
         }
+        
+        // Set sensible defaults if available
+        if (languages['en']) sourceDropdown.value = 'en';
+        if (languages['es']) targetDropdown.value = 'es';
+    }
 
-        uploadFile(file); // Call the upload function
-    });
+    // Initialize the page
+    async function init() {
+        await initLanguageDropdowns();
+        
+        // File picker
+        document.getElementById("uploadButton").addEventListener("click", function() {
+            fileInput.click();
+        });
 
-    // Handle file selection
-    fileInput.addEventListener("change", function(event) {
-        let file = event.target.files[0];
-        if (file) {
-            console.log("File Name:", file.name); 
-            
-            document.getElementById("changetxt").textContent = file.name;
-            document.querySelector(".Upload").style.display = "block";
-            document.querySelector(".noUpload").style.display = "none";
-        }
-    });
+        //  Start Translate
+        document.getElementById("translateButton").addEventListener("click", function() {
+            let file = fileInput.files[0]; // Get selected file
 
-    // Drag & Drop 
-    uploadBox.addEventListener("dragover", function(event) {
-        event.preventDefault();
-        uploadBox.classList.add("dragover");
-    });
-    uploadBox.addEventListener("dragleave", function() {
-        uploadBox.classList.remove("dragover");
-    });
-    uploadBox.addEventListener("drop", function(event) {
-        event.preventDefault();
-        uploadBox.classList.remove("dragover");
+            if (!file) {
+                alert("Please select a file first!");
+                return;
+            }
 
-        let file = event.dataTransfer.files[0];
-        if (file) {
-            console.log("File Name:", file.name); 
-            
-            document.getElementById("changetxt").textContent = file.name;
-            document.querySelector(".Upload").style.display = "block";
-            document.querySelector(".noUpload").style.display = "none";
-        }
-    });
+            uploadFile(file); // Call the upload function
+        });
 
+        // Handle file selection
+        fileInput.addEventListener("change", function(event) {
+            let file = event.target.files[0];
+            if (file) {
+                console.log("File Name:", file.name); 
+                
+                document.getElementById("changetxt").textContent = file.name;
+                document.querySelector(".Upload").style.display = "block";
+                document.querySelector(".noUpload").style.display = "none";
+            }
+        });
+
+        // Drag & Drop 
+        uploadBox.addEventListener("dragover", function(event) {
+            event.preventDefault();
+            uploadBox.classList.add("dragover");
+        });
+        uploadBox.addEventListener("dragleave", function() {
+            uploadBox.classList.remove("dragover");
+        });
+        uploadBox.addEventListener("drop", function(event) {
+            event.preventDefault();
+            uploadBox.classList.remove("dragover");
+
+            let file = event.dataTransfer.files[0];
+            if (file) {
+                console.log("File Name:", file.name); 
+                
+                document.getElementById("changetxt").textContent = file.name;
+                document.querySelector(".Upload").style.display = "block";
+                document.querySelector(".noUpload").style.display = "none";
+            }
+        });
+    }
+    init();
+    
     // Function to upload file to FastAPI 
     async function uploadFile(file) {
         // Check file type 
