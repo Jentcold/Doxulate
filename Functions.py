@@ -87,13 +87,14 @@ def repackage_docx(folder_to_zip, output_docx):
                 docx_zip.write(file_path, arcname)
 
 # clean temp folder
-    def clean_temp_folder():
+    UPLOAD_DIR="/app/tmp"
+    def clean_temp_folder(folder=UPLOAD_DIR):
         try:
-            if os.path.exists("/tmp"):
-                shutil.rmtree("/tmp")
-            os.makedirs("/tmp", exist_ok=True)
+            if os.path.exists(folder):
+                shutil.rmtree(folder)
+            os.makedirs(folder, exist_ok=True)
         except Exception as e:
-            print(f"Error cleaning /tmp: {str(e)}")
+            print(f"Error cleaning {folder}: {str(e)}")
 
 
 # operation function 
