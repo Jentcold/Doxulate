@@ -8,13 +8,15 @@ RUN apt-get update && \
     libmagic1 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
 COPY . .
-
+RUN pip install --no-cache-dir -r requirements.txt
+    
 # Create directories
 RUN mkdir -p /app/tmp /app/tmp_translated /app/site /app/site/HomePageAssets
+
+# Create non root user
+RUN useradd --create-home appuser
+USER appuser
 
 EXPOSE 8000
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
