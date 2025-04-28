@@ -55,39 +55,29 @@ def extract_text_from_docx(xml_file):
 
 # replace text in xml after translation
 def replace_text_in_xml(original_list, translated_list, tree, xml_file):
-    # Create a mapping for original to translated text for faster lookup
-    translation_map = dict(zip(original_list, translated_list))
-    
-    # Define the WordprocessingML namespace
-    namespaces = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+    # namespace
+    ns = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
     root = tree.getroot()
-    
-    # Extract text elements with XPath
-    text_elements = root.xpath('//w:t', namespaces=namespaces)
 
-    # Replace text in the elements 
-    for elem in text_elements:
-        if elem.text in translation_map:
-            # test check 
-            index = original_list.index(elem.text)
-            if index >= len(translated_list):
-                tree.write(xml_file, xml_declaration=True, encoding='UTF-8')
-                return
-            
-            # Replace the text in the element
-            elem.text = translation_map[elem.text]
+    # Extract text elements in the same order as original_list
+    text_elements = root.xpath('//w:t', namespaces=ns)
 
-    # Save the modified XML to a new file with the correct XML declaration
+    # Replace each node's text 
+    for node, new_text in zip(text_elements, translated_list):
+        node.text = new_text
+
+    # Save modified XML 
+    os.makedirs(os.path.dirname(xml_file), exist_ok=True)
     tree.write(xml_file, xml_declaration=True, encoding='UTF-8', standalone=True)
 
 # rezip xml to docx
 def repackage_docx(folder_to_zip, output_docx):
-    # Create a zip file (which will become your DOCX file)
+    # Create zip file
     with zipfile.ZipFile(output_docx, 'w', zipfile.ZIP_DEFLATED) as docx_zip:
-        # Walk through the folder structure
+        # Walk through folder structure
         for root, dirs, files in os.walk(folder_to_zip):
             for file in files:
-                # Create the correct relative path inside the zip file
+                # Create correct relative path
                 file_path = os.path.join(root, file)
                 arcname = os.path.relpath(file_path, folder_to_zip)
                 docx_zip.write(file_path, arcname)
