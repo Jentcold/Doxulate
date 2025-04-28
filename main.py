@@ -29,7 +29,9 @@ MAX_FILE_SIZE = 10 * 1024 * 1024
 
 # Temporary storage directory
 UPLOAD_DIR = "/app/tmp"
+TRANSLATED_DIR = "/app/tmp_translated"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+os.makedirs(TRANSLATED_DIR, exist_ok=True)
 
 # Home page endpoint
 @app.get("/", response_class=HTMLResponse)
