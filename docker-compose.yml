@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.3'
 
 services:
   libretranslate:
@@ -24,5 +24,4 @@ services:
       - ./tmp:/app/tmp
       - ./tmp_translated:/app/tmp_translated
     depends_on:
-      libretranslate:
-        condition: service_healthy
+      - libretranslate
