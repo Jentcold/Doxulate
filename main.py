@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from starlette.requests import Request
 from pydantic import BaseModel
+from datetime import datetime, timedelta
 import uvicorn
 import os
 import shutil
@@ -33,6 +34,23 @@ TRANSLATED_DIR = "/app/tmp_translated"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(TRANSLATED_DIR, exist_ok=True)
 
+# clean temp_translated
+def cleanup_old_files(folder_path="/temp_translated", max_age_hours=24):
+    try:
+        if not os.path.exists(folder_path):
+            return
+            
+        now = datetime.now()
+        for filename in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, filename)
+            if os.path.isfile(file_path):
+                file_time = datetime.fromtimestamp(os.path.getmtime(file_path))
+                if now - file_time > timedelta(hours=max_age_hours):
+                    os.unlink(file_path)
+                    print(f"Deleted old file: {filename}")
+    except Exception as e:
+        print(f"Cleanup error: {str(e)}")
+        
 # Home page endpoint
 @app.get("/", response_class=HTMLResponse)
 def load_homepage(request: Request):
