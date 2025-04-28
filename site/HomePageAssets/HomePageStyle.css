@@ -188,6 +188,17 @@ select {
     border: 1px solid red;
 }
 
+#loadText {
+    font-size: 18px;
+    text-align: center;
+}
+
+#loadText:before {
+    content: "⏳";
+    margin-right: 8px;
+}
+
+
 /* Footer */
 footer {
     position: fixed;
