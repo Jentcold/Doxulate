@@ -35,7 +35,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(TRANSLATED_DIR, exist_ok=True)
 
 # clean temp_translated
-def cleanup_old_files(folder_path="/temp_translated", max_age_hours=24):
+def cleanup_old_files(folder_path=TRANSLATED_DIR, max_age_hours=24):
     try:
         if not os.path.exists(folder_path):
             return
@@ -59,6 +59,9 @@ def load_homepage(request: Request):
 # File Upload end point
 @app.post("/upload/")
 async def upload_file(
+
+    cleanup_old_files()
+
     file: UploadFile = File(...),
     source_lang: str = Form(...),
     target_lang: str = Form(...)):
