@@ -4,7 +4,8 @@ from libretranslatepy import LibreTranslateAPI
 
 # translate function
 def translate(original_text_list, source_language, target_language):
-    lt = LibreTranslateAPI("http://172.17.0.2:5000")
+    lt_url = os.getenv("LIBRETRANSLATE_URL", "http://localhost:5000")
+    lt = LibreTranslateAPI(lt_url)
 
     translated_list = []
     for idx, element in enumerate(original_text_list, start=1):
