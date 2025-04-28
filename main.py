@@ -10,18 +10,11 @@ import os
 import shutil
 import magic
 import Functions
+import requests
+import time
 
-# Initialize FastAPI app
-app = FastAPI()
+# === Define variables ===
 
-# Set up the templates directory for Jinja2
-templates = Jinja2Templates(directory="/app/site")
-
-# Serve static files (CSS, JS, etc.)
-app.mount("/site", StaticFiles(directory="/app/site"), name="HTML")
-app.mount("/HomePageAssets", StaticFiles(directory="/app/site/HomePageAssets"), name="HomePageAssets")
-
-# Set up for file transfer 
 # Allowed file types (MIME types)
 ALLOWED_FILE_TYPES = {"application/vnd.openxmlformats-officedocument.wordprocessingml.document"}
 
@@ -34,7 +27,26 @@ TRANSLATED_DIR = "/app/tmp_translated"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(TRANSLATED_DIR, exist_ok=True)
 
-# clean temp_translated
+# === Define functions ===
+
+# Waiting function
+def wait_for_service(url, timeout=60):
+    start_time = time.time()
+    while True:
+        try:
+            r = requests.get(url)
+            if r.status_code == 200:
+                print(f"Service {url} is ready!")
+                return
+        except requests.exceptions.ConnectionError:
+            pass
+
+        if time.time() - start_time > timeout:
+            raise Exception(f"Timeout waiting for service {url}")
+        print(f"Waiting for {url}...")
+        time.sleep(2)
+        
+# Clean temp_translated
 def cleanup_old_files(folder_path=TRANSLATED_DIR, max_age_hours=24):
     try:
         if not os.path.exists(folder_path):
@@ -50,6 +62,21 @@ def cleanup_old_files(folder_path=TRANSLATED_DIR, max_age_hours=24):
                     print(f"Deleted old file: {filename}")
     except Exception as e:
         print(f"Cleanup error: {str(e)}")
+
+# === Initialise APP ===
+
+# Wait for LibreTranslate 
+wait_for_service("http://libretranslate:5000")
+
+# Initialize FastAPI app
+app = FastAPI()
+
+# Set up the templates directory for Jinja2
+templates = Jinja2Templates(directory="/app/site")
+
+# Serve static files (CSS, JS, etc.)
+app.mount("/site", StaticFiles(directory="/app/site"), name="HTML")
+app.mount("/HomePageAssets", StaticFiles(directory="/app/site/HomePageAssets"), name="HomePageAssets")
         
 # Home page endpoint
 @app.get("/", response_class=HTMLResponse)
@@ -59,13 +86,12 @@ def load_homepage(request: Request):
 # File Upload end point
 @app.post("/upload/")
 async def upload_file(
-
-    cleanup_old_files()
-
     file: UploadFile = File(...),
     source_lang: str = Form(...),
     target_lang: str = Form(...)):
-   
+
+    cleanup_old_files()
+    
     # Get file
     file_content = await file.read()
 
@@ -97,4 +123,4 @@ async def upload_file(
 
 if __name__ == "__main__": 
     port = int(os.getenv('PORT', 8000))
-    app.run(host='0.0.0.0', port=port)
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
