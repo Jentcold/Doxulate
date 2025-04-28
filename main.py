@@ -1,16 +1,9 @@
-import os
-import shutil
-import magic
-import requests
-time
-import logging
+import os, shutil, magic, requests, time, logging, uvicorn, Functions
 from fastapi import FastAPI, File, Form, UploadFile, HTTPException
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from starlette.requests import Request
-import uvicorn
-import Functions
+from starlette.requests import Request 
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
