@@ -1,0 +1,17 @@
+app = "doxulate"
+primary_region = "cdg" 
+
+[env]
+  LIBRETRANSLATE_URL = "http://libretranslate.internal:5000"
+
+[[services]]
+  internal_port = 8000
+  protocol = "tcp"
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.tcp_checks]]
+    interval = 10000
+    timeout = 2000
