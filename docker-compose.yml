@@ -18,7 +18,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - LIBRETRANSLATE_URL=http://libretranslate.internal:5000
+      - LIBRETRANSLATE_URL=http://libretranslate:5000
     volumes:
       - ./site:/app/site
       - ./tmp:/app/tmp
