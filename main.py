@@ -113,7 +113,11 @@ async def upload_file(
                 logger.info(f"Removed temporary file: {file_path}")
         except Exception as e:
             logger.error(f"Error removing temp file: {e}")
-
+            
+@app.get("/health", tags=["Health"])
+async def health_check():
+    return JSONResponse(content={"status": "ok"})
+    
 # Run the app
 if __name__ == "__main__":
     port = int(os.getenv('PORT', 8000))
