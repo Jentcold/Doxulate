@@ -1,7 +1,7 @@
 # Doxulate - Document Translation Web App
 
-![Doxulate Screenshot](![image]((https://github.com/user-attachments/assets/553911f0-8a84-4fd3-9571-f86319ad2141)
-)) 
+![Doxulate Screenshot]([image]((https://github.com/user-attachments/assets/553911f0-8a84-4fd3-9571-f86319ad2141)
+)
 
 
 FastAPI-powered web application for translating documents using LibreTranslate's self-hosted engine.
