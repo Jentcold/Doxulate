@@ -41,6 +41,10 @@ Access the application at: [http://localhost:8000](http://localhost:8000)
 | Doxulate | 8000 | Main web interface |
 | LibreTranslate | 5000 | Docker Translation engine API |
 
+### Note :
+
+I used LibreTranslate beacuse it was free and realtively small insize however you can change the engine to whichever you like jsut make sure to adjust the translate function in "Functions.py" accordingly .
+
 ## File Structure
 
 ```
