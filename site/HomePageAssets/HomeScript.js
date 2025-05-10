@@ -15,8 +15,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // inline messages
     function showMessage(type, text, timeout = 5000) {
         messageBox.textContent = text;
-        messageBox.className = "";           // reset classes
-        messageBox.classList.add(type);      // e.g. 'info', 'error', 'success'
+        messageBox.className = "";          
+        messageBox.classList.add(type);     
         messageBox.style.display = "block";
         if (timeout) {
             setTimeout(() => { messageBox.style.display = "none"; }, timeout);
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Load languages from API or fallback
     async function loadLanguages() {
         try {
-            let res = await fetch(`${API_BASE}/languages`);
+            let res = await fetch(`https://libretranslate:5000/languages`);
             if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
             let list = await res.json();
             return list.reduce((m, l) => (m[l.code] = l.name, m), {});
