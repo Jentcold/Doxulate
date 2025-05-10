@@ -86,6 +86,9 @@ async def upload_file(
                 logger.info(f"Removed temporary file: {file_path}")
         except Exception as e:
             logger.error(f"Error removing temp file: {e}")
+        finally:
+            cleanup_old_files()
+
             
 @app.get("/health", tags=["Health"])
 async def health_check():
