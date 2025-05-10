@@ -54,7 +54,7 @@ Access the application at: [http://localhost:8000](http://localhost:8000)
 Configure in `docker-compose.yml`:
 
 - `LIBRETRANSLATE_URL`: Translation service endpoint
-- `LOAD_ONLY`: Specify languages to enable to save space
+- `LT_LOAD_ONLY`: Specify languages to enable to save space
   (Simply remove the command if you wish to download all languages)
 
 ## Development Mode
