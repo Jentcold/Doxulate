@@ -20,12 +20,18 @@ FastAPI-powered web application for translating documents using LibreTranslate's
 - Docker Compose 2.12+
 - 4GB RAM minimum (8GB recommended for better performance)
 
-## One-Command Deployment
+## Deployment Steps
 
 ```bash
 git clone https://github.com/Jentcold/Doxulate.git
 cd Doxulate
-docker-compose up --build
+
+docker run -d -p 5000:5000 libretranslate/libretranslate:latest
+
+pip install -r requirements.txt
+
+python main.py
+
 ```
 
 Access the application at: [http://localhost:8000](http://localhost:8000)
