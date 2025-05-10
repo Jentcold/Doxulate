@@ -15,8 +15,8 @@ ALLOWED_FILE_TYPES = {"application/vnd.openxmlformats-officedocument.wordprocess
 # Max file size (10 MB)
 MAX_FILE_SIZE = 10 * 1024 * 1024
 # Temporary storage directories
-UPLOAD_DIR = "/tmp"
-TRANSLATED_DIR = "/tmp_translated"
+UPLOAD_DIR = "./tmp_uploaded"
+TRANSLATED_DIR = "./tmp_translated"
 os.makedirs(UPLOAD_DIR,exist_ok=True)
 os.makedirs(TRANSLATED_DIR,exist_ok=True)
 
