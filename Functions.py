@@ -6,8 +6,8 @@ from lxml import etree as ET
 from libretranslatepy import LibreTranslateAPI
 
 # Base directories
-UPLOAD_DIR = "/tmp"
-TRANSLATED_DIR = "/tmp_translated"
+UPLOAD_DIR = "./tmp"
+TRANSLATED_DIR = "./tmp_translated"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
