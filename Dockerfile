@@ -8,15 +8,22 @@ RUN apt-get update && \
     libmagic1 \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy project files
 COPY . .
-RUN pip install --no-cache-dir -r requirements.txt
-    
-# Create directories
-RUN mkdir -p /app/tmp /app/tmp_translated /app/site /app/site/HomePageAssets
-RUN chmod -R 777 /app/tmp /app/tmp_translated
 
-# Create non root user
+# Install Python deps
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Create necessary directories
+RUN mkdir -p /app/tmp /app/tmp_translated /app/site /app/site/HomePageAssets
+
+# Create non-root user
 RUN useradd --create-home appuser
+
+# Give ownership of /app to appuser
+RUN chown -R appuser:appuser /app
+
+# Switch to non-root user
 USER appuser
 
 EXPOSE 8000
