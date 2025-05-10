@@ -57,13 +57,6 @@ Configure in `docker-compose.yml`:
 - `LT_LOAD_ONLY`: Specify languages to enable to save space
   (Simply remove the command if you wish to download all languages)
 
-## Development Mode
-
-```bash
-# Run with live reload for frontend changes
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
-```
-
 ## Troubleshooting
 
 **Q**: Translations fail with connection errors  
