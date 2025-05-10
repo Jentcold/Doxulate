@@ -6,8 +6,8 @@ from lxml import etree as ET
 from libretranslatepy import LibreTranslateAPI
 
 # Base directories
-UPLOAD_DIR = "/app/tmp"
-TRANSLATED_DIR = "/app/tmp_translated"
+UPLOAD_DIR = "/tmp"
+TRANSLATED_DIR = "/tmp_translated"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 # translate function
 def translate(original_text_list, source_language, target_language):
-    lt = LibreTranslateAPI(os.getenv("LIBRETRANSLATE_URL"))
+    lt = LibreTranslateAPI("https://localhost:5000/")
 
     translated_list = []
     total = len(original_text_list)
