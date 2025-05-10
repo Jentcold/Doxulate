@@ -15,8 +15,10 @@ ALLOWED_FILE_TYPES = {"application/vnd.openxmlformats-officedocument.wordprocess
 # Max file size (10 MB)
 MAX_FILE_SIZE = 10 * 1024 * 1024
 # Temporary storage directories
-UPLOAD_DIR = "/app/tmp"
-TRANSLATED_DIR = "/app/tmp_translated"
+UPLOAD_DIR = "/tmp"
+TRANSLATED_DIR = "/tmp_translated"
+os.mkdir(UPLOAD_DIR,exist_ok=True)
+os.mkdir(TRANSLATED_DIR,exist_ok=True)
 
 # === Define functions ===
 # Clean old translated files
@@ -39,9 +41,9 @@ def cleanup_old_files(folder_path=TRANSLATED_DIR, max_age_hours=24):
 app = FastAPI()
 
 # Templates and static files
-templates = Jinja2Templates(directory="/app/site")
-app.mount("/site", StaticFiles(directory="/app/site"), name="site")
-app.mount("/HomePageAssets", StaticFiles(directory="/app/site/HomePageAssets"), name="assets")
+templates = Jinja2Templates(directory="/site")
+app.mount("/site", StaticFiles(directory="/site"), name="site")
+app.mount("/HomePageAssets", StaticFiles(directory="/site/HomePageAssets"), name="assets")
 
 # Home page endpoint
 @app.get("/", response_class=HTMLResponse)
@@ -79,17 +81,11 @@ async def upload_file(
     except Exception as e:
         logger.error(f"Upload processing failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Internal server error")
-    finally:
-        try:
-            if os.path.exists(file_path):
-                os.remove(file_path)
-                logger.info(f"Removed temporary file: {file_path}")
-        except Exception as e:
-            logger.error(f"Error removing temp file: {e}")
-        finally:
-            cleanup_old_files()
 
             
 @app.get("/health", tags=["Health"])
 async def health_check():
     return JSONResponse(content={"status": "ok"})
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
