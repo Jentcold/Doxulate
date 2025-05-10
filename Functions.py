@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 # translate function
 def translate(original_text_list, source_language, target_language):
-    lt = LibreTranslateAPI("https://localhost:5000/")
+    lt = LibreTranslateAPI("http://localhost:5000/")
 
     translated_list = []
     total = len(original_text_list)
