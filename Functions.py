@@ -8,9 +8,6 @@ from libretranslatepy import LibreTranslateAPI
 # Base directories
 UPLOAD_DIR = "/app/tmp"
 TRANSLATED_DIR = "/app/tmp_translated"
-posix = os.makedirs if hasattr(os, 'makedirs') else os.makedirs
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-os.makedirs(TRANSLATED_DIR, exist_ok=True)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
@@ -18,8 +15,7 @@ logger = logging.getLogger(__name__)
 
 # translate function
 def translate(original_text_list, source_language, target_language):
-    lt_url = os.getenv("LIBRETRANSLATE_URL", "http://localhost:5000")
-    lt = LibreTranslateAPI(lt_url)
+    lt = LibreTranslateAPI("http://localhost:5000")
 
     translated_list = []
     total = len(original_text_list)
