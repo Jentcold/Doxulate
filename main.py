@@ -17,27 +17,8 @@ MAX_FILE_SIZE = 10 * 1024 * 1024
 # Temporary storage directories
 UPLOAD_DIR = "/app/tmp"
 TRANSLATED_DIR = "/app/tmp_translated"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-os.makedirs(TRANSLATED_DIR, exist_ok=True)
 
 # === Define functions ===
-# Waiting function
-def wait_for_service(url, timeout=60):
-    start_time = time.time()
-    while True:
-        try:
-            r = requests.get(url)
-            if r.status_code == 200:
-                logger.info(f"Service {url} is ready!")
-                return
-        except requests.exceptions.RequestException:
-            pass
-        if time.time() - start_time > timeout:
-            logger.error(f"Timeout waiting for service {url}")
-            raise Exception(f"Timeout waiting for service {url}")
-        logger.info(f"Waiting for {url}...")
-        time.sleep(2)
-
 # Clean old translated files
 def cleanup_old_files(folder_path=TRANSLATED_DIR, max_age_hours=24):
     try:
@@ -56,14 +37,6 @@ def cleanup_old_files(folder_path=TRANSLATED_DIR, max_age_hours=24):
 
 # === Initialize APP ===
 app = FastAPI()
-
-# Wait for LibreTranslate at startup
-def on_startup():
-    try:
-        wait_for_service("http://libretranslate:5000")
-    except Exception as e:
-        logger.error(f"Startup wait failed: {e}")
-app.add_event_handler("startup", on_startup)
 
 # Templates and static files
 templates = Jinja2Templates(directory="/app/site")
@@ -117,8 +90,3 @@ async def upload_file(
 @app.get("/health", tags=["Health"])
 async def health_check():
     return JSONResponse(content={"status": "ok"})
-    
-# Run the app
-if __name__ == "__main__":
-    port = int(os.getenv('PORT', 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
