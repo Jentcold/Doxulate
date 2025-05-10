@@ -80,9 +80,6 @@ def full_operation(filepath, source_language, target_language):
     path = os.path.splitext(filepath)[0]
     outputfolder = f"{path}_xml"
     
-    # Ensure work directory starts clean
-    clean_temp_folder(UPLOAD_DIR)
-    
     try:
         unzip_docx(filepath, outputfolder)
         
@@ -96,6 +93,8 @@ def full_operation(filepath, source_language, target_language):
         filename = path.split('/')[-1]
         translated_path = f"{TRANSLATED_DIR}/{filename}_translated.docx"
         repackage_docx(outputfolder, translated_path)
+
+        clean_temp_folder(UPLOAD_DIR)
         
         return translated_path
     
@@ -103,7 +102,3 @@ def full_operation(filepath, source_language, target_language):
         
         logger.error(f"Full operation failed: {e}")
         raise
-    finally:
-        clean_temp_folder(UPLOAD_DIR)
-        if os.path.exists(outputfolder):
-            shutil.rmtree(outputfolder, ignore_errors=True)
