@@ -22,6 +22,7 @@ RUN useradd --create-home appuser
 
 # Give ownership of /app to appuser
 RUN chown -R appuser:appuser /app
+RUN chmod -R 777 /app/tmp /app/tmp_translated /app/site
 
 # Switch to non-root user
 USER appuser
