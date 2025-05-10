@@ -17,8 +17,8 @@ MAX_FILE_SIZE = 10 * 1024 * 1024
 # Temporary storage directories
 UPLOAD_DIR = "/tmp"
 TRANSLATED_DIR = "/tmp_translated"
-os.mkdir(UPLOAD_DIR,exist_ok=True)
-os.mkdir(TRANSLATED_DIR,exist_ok=True)
+os.makedirs(UPLOAD_DIR,exist_ok=True)
+os.makedirs(TRANSLATED_DIR,exist_ok=True)
 
 # === Define functions ===
 # Clean old translated files
