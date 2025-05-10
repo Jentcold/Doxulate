@@ -43,7 +43,7 @@ Access the application at: [http://localhost:8000](http://localhost:8000)
 
 ### Note :
 
-I used LibreTranslate beacuse it was free and realtively small insize however you can change the engine to whichever you like jsut make sure to adjust the translate function in "Functions.py" accordingly .
+I used LibreTranslate beacuse it was free and realtively small in size however you can change the engine to whichever one you like just make sure to adjust the translate function in "Functions.py" accordingly .
 
 ## File Structure
 
