@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  myapp:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - libretranslate
+    environment:
+      - LIBRETRANSLATE_URL=http://libretranslate:5000
+
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - LT_LOAD_ONLY=en,es,ar
