@@ -1,6 +1,6 @@
 # Doxulate - Document Translation Web App
 
-![Doxulate Screenshot]([image]((https://github.com/user-attachments/assets/553911f0-8a84-4fd3-9571-f86319ad2141)
+![Doxulate Screenshot]([image](![Screenshot from 2025-05-10 17-32-54](https://github.com/user-attachments/assets/cdd7d29e-4bdd-42cf-ba66-e9bba2efac0c)
 )
 
 
