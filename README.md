@@ -9,13 +9,13 @@ FastAPI-powered web application for translating documents using LibreTranslate's
 ## Features
 
 - DOCX file translation with formatting preservation 
-- Multi-language support (English, Spanish, French, etc.)
+- Customizable translation engine
 - Simple drag-and-drop interface
 - ( PDF and other formats support soon )
 
 ## Prerequisites
 
-- Docker Engine 20.10+
+- Docker Engine 20.10+ (optional)
 - 4GB RAM minimum (8GB recommended for better performance)
 
 ## Deployment commands
@@ -43,7 +43,7 @@ Access the application at: [http://localhost:8000](http://localhost:8000)
 
 ### Note :
 
-I used LibreTranslate beacuse it was free and realtively small in size however you can change the engine to whichever one you like just make sure to adjust the translate function in "Functions.py" accordingly .
+The translation language model you use is up to you just make sure to input the correct URL into both functions in "Functions.py" and "HomePageScript.JS"
 
 ## File Structure
 
@@ -61,7 +61,7 @@ I used LibreTranslate beacuse it was free and realtively small in size however y
 ## Troubleshooting
 
 **Q**: Translations fail with connection errors  
-**A**: Ensure LibreTranslate container is up and running 
+**A**: Ensure your translation engine is up and running 
 
 **Q**: File uploads failing  
 **A**: Ensure the `tmp` directory exists and have write permissions
