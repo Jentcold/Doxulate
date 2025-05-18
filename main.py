@@ -50,6 +50,18 @@ app.mount("/HomePageAssets", StaticFiles(directory="/site/HomePageAssets"), name
 def load_homepage(request: Request):
     return templates.TemplateResponse("homepage.html", {"request": request, "variable": "value"})
 
+# Language list return endpoint for JS 
+SUPPORTED_LANGUAGES = [
+    {"code": "en", "name": "English"},
+    {"code": "ar", "name": "Arabic"},
+    {"code": "fr", "name": "French"},
+    {"code": "es", "name": "Spanish"},
+]
+
+@app.get("/languages")
+async def get_languages():
+    return SUPPORTED_LANGUAGES
+
 # File Upload endpoint
 @app.post("/upload/")
 async def upload_file(
