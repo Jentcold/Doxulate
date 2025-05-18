@@ -43,7 +43,7 @@ Access the application at: [http://localhost:8000](http://localhost:8000)
 
 ### Note :
 
-The translation language model you use is up to you just make sure to input the correct URL into both functions in "Functions.py" and "HomePageScript.JS"
+Since this is a quickstart guide i have opted for libretranslate since its simple, self hosted, maintaned and free to use, that being said the translation language model you use is up to you just make sure to input the correct URL into both functions in "Functions.py" and "HomePageScript.JS" or use an enviromental variable.
 
 ## File Structure
 
