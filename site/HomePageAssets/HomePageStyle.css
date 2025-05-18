@@ -174,8 +174,8 @@ select {
         transition: all 0.1s ease-in-out;
     }
     button:active {
-        transform: scale(0.95); /* Slight shrink effect */
-        background-color: #636363; /* Darker shade on click */
+        transform: scale(0.95); 
+        background-color: #636363; 
     }
     
 }
@@ -297,8 +297,8 @@ footer {
             transition: all 0.1s ease-in-out;
         }
         button:active {
-            transform: scale(0.95); /* Slight shrink effect */
-            background-color: #636363; /* Darker shade on click */
+            transform: scale(0.95); 
+            background-color: #636363; 
         }
         
     }
