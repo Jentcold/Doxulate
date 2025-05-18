@@ -43,7 +43,7 @@ Access the application at: [http://localhost:8000](http://localhost:8000)
 
 ### Note :
 
-Since this is a quickstart guide i have opted for libretranslate since its simple, self hosted, maintaned and free to use, that being said the translation language model you use is up to you just make sure to update the translation function in "Functions.py" or use an enviromental variable.
+Since this is a quickstart guide i have opted for libretranslate since its simple, self hosted, maintaned and free to use, that being said the translation language model you use is up to you just make sure to update the Languages list in "main.py" and the translation function in "Functions.py" or use an enviromental variable.
 
 ## File Structure
 
