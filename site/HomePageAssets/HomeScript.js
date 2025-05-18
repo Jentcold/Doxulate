@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Load languages from API or fallback
     async function loadLanguages() {
         try {
-            let res = await fetch(`http://localhost:5000/languages`);
+            let res = await fetch(`/languages`);
             if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
             let list = await res.json();
             return list.reduce((m, l) => (m[l.code] = l.name, m), {});
