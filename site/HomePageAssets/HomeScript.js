@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Fallback languages
     const FALLBACK_LANGUAGES = {
         en: "English", fr: "French", ar: "Arabic",
-        es: "Spanish", de: "German", zh: "Chinese"
+        es: "Spanish"
     };
 
     // Load languages from API or fallback
