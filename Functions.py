@@ -4,6 +4,7 @@ import zipfile
 import logging
 from lxml import etree as ET
 from libretranslatepy import LibreTranslateAPI
+from tqdm import tqdm
 
 # Base directories
 UPLOAD_DIR = "./tmp"
@@ -19,14 +20,15 @@ def translate(original_text_list, source_language, target_language):
 
     translated_list = []
     total = len(original_text_list)
-    for idx, element in enumerate(original_text_list, start=1):
+    logger.info(f"Translation starting")
+    for idx, element in enumerate(tqdm(original_text_list, desc="Translating", unit="item"), start=1):
         try:
             translated_element = lt.translate(element, source_language, target_language)
             translated_list.append(translated_element)
-            logger.info(f"Translated {idx}/{total}")
         except Exception as e:
             logger.error(f"Error translating element {idx}: {e}")
             raise
+    logger.info(f"Translation Successful")
     return translated_list
 
 # document functions
