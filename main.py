@@ -41,9 +41,9 @@ def cleanup_old_files(folder_path=TRANSLATED_DIR, max_age_hours=24):
 app = FastAPI()
 
 # Templates and static files
-templates = Jinja2Templates(directory="/site")
-app.mount("/site", StaticFiles(directory="/site"), name="site")
-app.mount("/HomePageAssets", StaticFiles(directory="/site/HomePageAssets"), name="assets")
+templates = Jinja2Templates(directory="./site")
+app.mount("/site", StaticFiles(directory="./site"), name="site")
+app.mount("/HomePageAssets", StaticFiles(directory="./site/HomePageAssets"), name="assets")
 
 # Home page endpoint
 @app.get("/", response_class=HTMLResponse)
