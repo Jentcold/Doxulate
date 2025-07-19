@@ -47,3 +47,48 @@ git clone https://github.com/Jentcold/Doxulate.git
 cd Doxulate
 pip install -r requirements.txt
 python main.py
+```
+Then visit http://localhost:8000 in your browser.
+
+### Note:
+
+- Make sure LibreTranslate is installed or running in the background
+
+--- 
+
+## ⚙️ Project Structure
+```
+Doxulate/
+├── main.py - FastAPI entry point
+├── translator/ - Document parsing and translation logic
+├── static/ - HTML, CSS, JS frontend
+├── templates/ - Jinja2 templates (if used)
+├── test_files/ - Sample files for demo/testing
+└── requirements.txt
+
+```
+
+---
+
+## 📦 Future Features (Planned)
+
+- Increase supported formats
+
+- Docker Contanrized 
+
+- User accounts (auth system, history)
+
+- Chrome extension version
+
+---
+
+## 💼 About the Developer
+
+Built by Mostafa Baghdady (@Jentcold), a backend developer passionate about tools that solve real-world problems.
+
+---
+
+## 📬 Contact
+
+[GitHub](https://github.com/Jentcold) | [LinkedIn](https://www.linkedin.com/in/mostafahanibaghdady/)
+
