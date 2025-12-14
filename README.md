@@ -53,6 +53,12 @@ Then visit http://localhost:8000 in your browser.
 ### Note:
 
 - Make sure LibreTranslate is installed or running in the background
+- you can use docker to run it locally with these commands 
+```
+docker pull libretranslate/libretranslate:latest
+docker run -d -p 5000:5000 libretranslate/libretranslate:latest
+
+```
 
 --- 
 
@@ -60,10 +66,8 @@ Then visit http://localhost:8000 in your browser.
 ```
 Doxulate/
 ├── main.py - FastAPI entry point
-├── translator/ - Document parsing and translation logic
-├── static/ - HTML, CSS, JS frontend
-├── templates/ - Jinja2 templates (if used)
-├── test_files/ - Sample files for demo/testing
+├── Functions.py - Document parsing and translation logic
+├── site/ - HTML, CSS, JS frontend
 └── requirements.txt
 
 ```
