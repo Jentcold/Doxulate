@@ -9,7 +9,7 @@
 - 🔤 Translate entire documents: DOCX (More Soon)
 - 🎨 Preserve original formatting (fonts, colors, layout)
 - 🚀 Fast and lightweight — runs locally with no cloud dependencies
-- 🔐 Private by default — nothing is uploaded unless you choose to
+- 🔐 Private by default — nothing is uploaded when you run locally
 - 🌍 Supports multiple languages using LibreTranslate
 
 ---
@@ -78,17 +78,13 @@ Doxulate/
 
 - Increase supported formats
 
-- Docker Contanrized 
+- Updated UI/UX
 
 - User accounts (auth system, history)
 
-- Chrome extension version
+- Custom translation engine ( machine learning) 
 
----
-
-## 💼 About the Developer
-
-Built by Mostafa Baghdady (@Jentcold), a backend developer passionate about tools that solve real-world problems.
+- Contanrized with Docker 
 
 ---
 
